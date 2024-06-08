@@ -55,7 +55,7 @@ def predict():
     # along with class labels and possibly confidence scores.
     predicted_img_path = Path(f'static/data/{prediction_id}/{original_img_path}')
 
-    # TODO Uploads the predicted image (predicted_img_path) to S3 (be careful not to override the original image).
+    # Uploads the predicted image (predicted_img_path) to S3 (be careful not to override the original image).
 
     s3client.upload_file(predicted_img_path, images_bucket, 'predictions/'+img_name)
 

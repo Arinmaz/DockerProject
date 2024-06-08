@@ -7,8 +7,8 @@ import boto3
 import uuid
 import requests
 from dotenv import load_dotenv
-load_dotenv()
 
+load_dotenv()
 
 s3client = boto3.client('s3')
 images_bucket = os.environ['BUCKET_NAME']
@@ -89,29 +89,34 @@ class ObjectDetectionBot(Bot):
                 logger.info(f'object_name : {object_name}')
 
                 s3client.upload_file(photo_path, images_bucket, object_name)
-                # checking if the file is uploaded to s3 before sending http request to yolo5
+                # checking if the file is uploaded to s3
                 max_attempts = 10
                 for attempt in range(max_attempts):
                     response = s3client.list_objects_v2(Bucket=images_bucket, Prefix=object_name)
                     if 'Contents' in response:
-                        print("File is available on s3")
+                        logger.info("File is available on S3")
                         break
                     else:
-                        print("file is not available on s3 yet, trying again in 5 milisec..")
+                        logger.info("File is not available on S3 yet, retrying in 5 seconds...")
                         time.sleep(5)
                 else:
                     raise TimeoutError("File upload time out. could not find file after 10 attempts")
 
                 #  send an HTTP request to the `yolo5` service for prediction
-                # curl - X POST localhost:8081/predict?imgName=f'{object_name}'
                 url = f'http://localhost:8081/predict?imgName={object_name}'
                 logger.info(f'url : {url}')
                 response = requests.post(url)
                 if response.status_code == 200:
-                    print("Prediction Succeeded!")
-                    #  send the returned results to the Telegram end-user
+                    logger.info("Prediction succeeded!")
                     prediction_result = response.json()
                     self.send_text(msg['chat']['id'], f"Detection results: {prediction_result}")
                 else:
-                    print("Prediction Failed. Status code:", response.status_code)
+                    logger.error(f"Prediction failed. Status code: {response.status_code}")
+                    self.send_text(msg['chat']['id'], f"Prediction failed, please try again.")
+            except Exception as e:
+                logger.error(f"Error handling photo message: {e}")
+                self.send_text(msg['chat']['id'], f"An error occurred: {e}")
+        else:
+            super().handle_message(msg)
 
+            #  send the returned results to the Telegram end-user
