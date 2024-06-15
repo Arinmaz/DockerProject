@@ -27,7 +27,7 @@ jobs:
           # Login to DockerHub (comment out if you don't use DockerHub):         
            docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_PASSWORD }}
 
-          IMAGE_NAME=arin-docker-repository:telegram-bot-image:${{ github.run_number }}
+          IMAGE_NAME=${{ secrets.DOCKERHUB_USERNAME }}/arin-docker-repository:telegram-bot-image:${{ github.run_number }}
           docker build -t $IMAGE_NAME .
           docker push $IMAGE_NAME
 
@@ -47,10 +47,9 @@ jobs:
                
           docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_PASSWORD }} 
 
-          IMAGE_NAME=arin-docker-repository:my-yolo-app:${{ github.run_number }}
+          IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/arin-docker-repository:my-yolo-app:${{ github.run_number }}
           docker build -t $IMAGE_NAME .
           docker push $IMAGE_NAME
-
   Deploy:
     name: Deploy Docker compose project
     runs-on: ubuntu-latest
