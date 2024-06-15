@@ -7,6 +7,8 @@ services:
       - mongoCluster
     ports:
       - 27017:27017
+    env_file:
+      - .env
     volumes:
       - ./init.sh:/docker-entrypoint-initdb.d/init.sh
 
@@ -17,6 +19,8 @@ services:
       - mongoCluster
     ports:
       - 27018:27017
+    env_file:
+      - .env
 
   mongo3:
     image: ${MONGO_IMG_NAME}
@@ -25,6 +29,8 @@ services:
       - mongoCluster
     ports:
       - 27019:27017
+    env_file:
+      - .env
 
   polybot:
     image: ${POLYBOT_IMG_NAME}
