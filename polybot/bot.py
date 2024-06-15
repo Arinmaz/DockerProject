@@ -105,10 +105,10 @@ class ObjectDetectionBot(Bot):
                 else:
                     raise TimeoutError("File upload time out. could not find file after 10 attempts")
 
-                #  send an HTTP request to the `yolo5` service for prediction
 
                 url = f'http://my-yolo-app:8081/predict?imgName={object_name}'
                 logger.info(f'url : {url}')
+                #  send an HTTP request to the `yolo5` service for prediction
                 response = requests.post(url)
                 if response.status_code == 200:
                     logger.info("Prediction succeeded!")
