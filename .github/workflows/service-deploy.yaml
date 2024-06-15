@@ -27,7 +27,7 @@ jobs:
           # Login to DockerHub (comment out if you don't use DockerHub):         
            docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_PASSWORD }}
 
-          IMAGE_NAME=polybot:${{ github.run_number }}
+          IMAGE_NAME=arinmaz/arin-docker-repository:telegram-bot-image:${{ github.run_number }}
           docker build -t $IMAGE_NAME .
           docker push $IMAGE_NAME
 
@@ -47,7 +47,7 @@ jobs:
                
           docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_PASSWORD }} 
 
-          IMAGE_NAME=yolo5:${{ github.run_number }}
+          IMAGE_NAME=arinmaz/arin-docker-repository:my-yolo-app:${{ github.run_number }}
           docker build -t $IMAGE_NAME .
           docker push $IMAGE_NAME
 
