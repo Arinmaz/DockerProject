@@ -4,14 +4,15 @@ import os
 import time
 from telebot.types import InputFile
 import boto3
-import uuid
 import requests
 from dotenv import load_dotenv
+import uuid
 
 load_dotenv()
-
 s3client = boto3.client('s3')
-images_bucket = os.environ['BUCKET_NAME']
+images_bucket = os.getenv("BUCKET_NAME")
+
+
 class Bot:
 
     def __init__(self, token, telegram_chat_url):
@@ -78,9 +79,10 @@ class ObjectDetectionBot(Bot):
 
         if self.is_current_msg_photo(msg):
             photo_path = self.download_user_photo(msg)
+            file_name = os.path.basename(photo_path).replace('/', '_')  # Modification here
+            # Generate a unique identifier for the file
             unique_id = uuid.uuid4()
-            object_name = f'photos/{unique_id}_{os.path.basename(photo_path)}'
-
+            object_name = f'photos_{unique_id}_{file_name}'
 
             #  upload the photo to S3
             try:
@@ -88,7 +90,8 @@ class ObjectDetectionBot(Bot):
                 logger.info(f'bucket_name : {images_bucket}')
                 logger.info(f'object_name : {object_name}')
 
-                s3client.upload_file(photo_path, images_bucket, object_name)
+                file_path_str = str(photo_path)
+                s3client.upload_file(file_path_str, images_bucket, object_name)
                 # checking if the file is uploaded to s3
                 max_attempts = 10
                 for attempt in range(max_attempts):
@@ -103,13 +106,19 @@ class ObjectDetectionBot(Bot):
                     raise TimeoutError("File upload time out. could not find file after 10 attempts")
 
                 #  send an HTTP request to the `yolo5` service for prediction
-                url = f'http://localhost:8081/predict?imgName={object_name}'
+
+                url = f'http://my-yolo-app:8081/predict?imgName={object_name}'
                 logger.info(f'url : {url}')
                 response = requests.post(url)
                 if response.status_code == 200:
                     logger.info("Prediction succeeded!")
                     prediction_result = response.json()
-                    self.send_text(msg['chat']['id'], f"Detection results: {prediction_result}")
+                    object_counts = {}
+                    for label in prediction_result['labels']:
+                        object_class = label['class']
+                        object_counts[object_class] = object_counts.get(object_class, 0) + 1
+                    result_message = '\n'.join([f"{object_class}: {count}" for object_class, count in object_counts.items()])
+                    self.send_text(msg['chat']['id'], f"Detection results:\n{result_message}")
                 else:
                     logger.error(f"Prediction failed. Status code: {response.status_code}")
                     self.send_text(msg['chat']['id'], f"Prediction failed, please try again.")
@@ -118,5 +127,3 @@ class ObjectDetectionBot(Bot):
                 self.send_text(msg['chat']['id'], f"An error occurred: {e}")
         else:
             super().handle_message(msg)
-
-            #  send the returned results to the Telegram end-user

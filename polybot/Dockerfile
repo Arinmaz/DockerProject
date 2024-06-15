@@ -4,4 +4,7 @@ COPY requirements.txt .
 RUN pip install -r requirements.txt
 COPY . .
 
+# Ensure that .env file is copied
+COPY .env .env
+
 CMD ["python3", "app.py"]

@@ -3,3 +3,4 @@ pyyaml
 loguru
 boto3
 pymongo
+python-dotenv
