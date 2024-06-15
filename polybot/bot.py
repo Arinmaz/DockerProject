@@ -16,7 +16,7 @@ images_bucket = os.getenv("BUCKET_NAME")
 class Bot:
 
     def __init__(self, token, telegram_chat_url):
-        # create a new instance of the TeleBot class
+        # create a new instance of the TeleBot class.
         # all communication with Telegram servers are done using self.telegram_bot_client
         self.telegram_bot_client = telebot.TeleBot(token)
 
