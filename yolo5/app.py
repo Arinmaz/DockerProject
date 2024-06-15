@@ -11,9 +11,7 @@ import pymongo
 from pymongo import MongoClient
 from dotenv import load_dotenv
 
-path_to_env_file = "/usr/src/app/.env"
-load_dotenv(path_to_env_file)
-logger.info(f'path_to_env_file: {path_to_env_file}.')
+load_dotenv()
 
 # Now you can access environment variables as usual
 
