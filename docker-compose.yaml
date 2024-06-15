@@ -1,7 +1,7 @@
 
 services:
   mongo1:
-    image: ${{ secrets.DOCKERHUB_USERNAME }}/arin-docker-repository:custom-mongo-replset
+    image: arinmaz/arin-docker-repository:custom-mongo-replset
     container_name: mongo1
     networks:
       - mongoCluster
@@ -13,7 +13,7 @@ services:
       - ./init.sh:/docker-entrypoint-initdb.d/init.sh
 
   mongo2:
-    image: ${{ secrets.DOCKERHUB_USERNAME }}/arin-docker-repository:custom-mongo-replset
+    image: arinmaz/arin-docker-repository:custom-mongo-replset
     container_name: mongo2
     networks:
       - mongoCluster
@@ -23,7 +23,7 @@ services:
       - .env
 
   mongo3:
-    image: ${{ secrets.DOCKERHUB_USERNAME }}/arin-docker-repository:custom-mongo-replset
+    image: arinmaz/arin-docker-repository:custom-mongo-replset
     container_name: mongo3
     networks:
       - mongoCluster
