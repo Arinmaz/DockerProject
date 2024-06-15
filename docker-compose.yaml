@@ -1,0 +1,58 @@
+
+services:
+  mongo1:
+    image: ${MONGO_IMG_NAME}
+    container_name: mongo1
+    networks:
+      - mongoCluster
+    ports:
+      - 27017:27017
+    volumes:
+      - ./init.sh:/docker-entrypoint-initdb.d/init.sh
+
+  mongo2:
+    image: ${MONGO_IMG_NAME}
+    container_name: mongo2
+    networks:
+      - mongoCluster
+    ports:
+      - 27018:27017
+
+  mongo3:
+    image: ${MONGO_IMG_NAME}
+    container_name: mongo3
+    networks:
+      - mongoCluster
+    ports:
+      - 27019:27017
+
+  polybot:
+    image: ${POLYBOT_IMG_NAME}
+    container_name: polybot
+    networks:
+      - mongoCluster
+      - yoloCluster
+    ports:
+      - 8443:8443
+    env_file:
+      - .env
+    volumes:
+      - /home/areenm/.aws/credentials:/root/.aws/credentials
+    environment:
+      - TELEGRAM_TOKEN=${TELEGRAM_TOKEN}
+      - TELEGRAM_APP_URL=${TELEGRAM_APP_URL}
+
+  my-yolo-app:
+    image: ${YOLO5_IMG_NAME}
+    container_name: my-yolo-app
+    networks:
+      - mongoCluster
+      - yoloCluster
+    ports:
+      - 8081:8081
+    env_file:
+      - .env
+
+networks:
+  mongoCluster:
+  yoloCluster:
