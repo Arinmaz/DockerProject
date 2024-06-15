@@ -47,7 +47,7 @@ jobs:
                
           docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_PASSWORD }} 
 
-          IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/arin-docker-repository:my-yolo-app${{ github.run_number }}
+          IMAGE_NAME=${{ secrets.DOCKERHUB_USERNAME }}/arin-docker-repository:my-yolo-app${{ github.run_number }}
           docker build -t $IMAGE_NAME .
           docker push $IMAGE_NAME
   Deploy:
