@@ -1,6 +1,6 @@
 services:
   mongo1:
-    image: mongo:5
+    image: ${MONGO_IMG_NAME}
     container_name: mongo1
     command: mongod --replSet mongo-replica-set --bind_ip localhost,mongo1
     ports:
@@ -13,7 +13,7 @@ services:
       - .env
 
   mongo2:
-    image: mongo:5
+    image: ${MONGO_IMG_NAME}
     container_name: mongo2
     command: mongod --replSet mongo-replica-set --bind_ip localhost,mongo2
     ports:
@@ -25,7 +25,7 @@ services:
 
 
   mongo3:
-    image: mongo:5
+    image: ${MONGO_IMG_NAME}
     container_name: mongo3
     command: mongod --replSet mongo-replica-set --bind_ip localhost,mongo3
     ports:
@@ -38,7 +38,7 @@ services:
 
   mongo-init:
     container_name: mongo-init
-    image: mongo:5
+    image: ${MONGO_IMG_NAME}
     networks:
       - mongoCluster
     depends_on:
