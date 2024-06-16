@@ -64,7 +64,7 @@ services:
     environment:
       - BUCKET_NAME=${BUCKET_NAME}
       - TELEGRAM_APP_URL=${TELEGRAM_APP_URL}
-      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
+      - TELEGRAM_TOKEN=${TELEGRAM_BOT_TOKEN}
 
 
   my-yolo-app:
