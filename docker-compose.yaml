@@ -46,7 +46,7 @@ services:
       - mongo2
       - mongo3
     volumes:
-      - ./init.sh:/docker-entrypoint-initdb.d/init.sh
+      - /home/ubuntu/mongo_init:/docker-entrypoint-initdb.d
     restart: "no"
     entrypoint: [ "bash", "/docker-entrypoint-initdb.d/init.sh" ]
 
