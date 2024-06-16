@@ -2,34 +2,55 @@ services:
   mongo1:
     image: ${MONGO_IMG_NAME}
     container_name: mongo1
-    networks:
-      - mongoCluster
+    command: mongod --replSet mongo-replica-set --bind_ip localhost,mongo1
     ports:
       - 27017:27017
+    networks:
+      - mongoCluster
+    volumes:
+      - mongo1-data:/data/db
     env_file:
       - .env
-    volumes:
-      - ./init.sh:/docker-entrypoint-initdb.d/init.sh
 
   mongo2:
     image: ${MONGO_IMG_NAME}
     container_name: mongo2
-    networks:
-      - mongoCluster
+    command: mongod --replSet mongo-replica-set --bind_ip localhost,mongo2
     ports:
       - 27018:27017
+    networks:
+      - mongoCluster
+    volumes:
+      - mongo2-data:/data/db
     env_file:
       - .env
 
   mongo3:
     image: ${MONGO_IMG_NAME}
     container_name: mongo3
-    networks:
-      - mongoCluster
+    command: mongod --replSet mongo-replica-set --bind_ip localhost,mongo3
     ports:
       - 27019:27017
+    networks:
+      - mongoCluster
+    volumes:
+      - mongo3-data:/data/db
     env_file:
       - .env
+
+  mongo-init:
+    container_name: mongo-init
+    image: ${MONGO_IMG_NAME}
+    networks:
+      - mongoCluster
+    depends_on:
+      - mongo1
+      - mongo2
+      - mongo3
+    volumes:
+      - ./init.sh:/docker-entrypoint-initdb.d/init.sh
+    restart: "no"
+    entrypoint: [ "bash", "/docker-entrypoint-initdb.d/init.sh" ]
 
   polybot:
     image: ${POLYBOT_IMG_NAME}
@@ -43,6 +64,9 @@ services:
       - .env
     volumes:
       - /home/areenm/.aws/credentials:/root/.aws/credentials
+    depends_on:
+      - mongo-init
+      - my-yolo-app
 
 
   my-yolo-app:
@@ -55,7 +79,13 @@ services:
       - 8081:8081
     env_file:
       - .env
+    depends_on:
+      - mongo-init
 
 networks:
   mongoCluster:
   yoloCluster:
+volumes:
+  mongo1-data:
+  mongo2-data:
+  mongo3-data:
