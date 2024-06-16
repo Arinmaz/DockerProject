@@ -95,7 +95,7 @@ jobs:
             YOLO5_IMG_NAME=arinmaz/arin-docker-repository:my-yolo-app${{ github.run_number }}
             TELEGRAM_APP_URL=${{ secrets.TELEGRAM_APP_URL }}
             MONGO_IMG_NAME=mongo:5
-            TELEGRAM_TOKEN=${{ secrets.TELEGRAM_BOT_TOKEN }}
+            TELEGRAM_BOT_TOKEN=${{ secrets.TELEGRAM_BOT_TOKEN }}
             BUCKET_NAME=arin-s3-bucket-ireland-eu-west-1
             """ > .env
             

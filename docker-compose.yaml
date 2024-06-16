@@ -58,13 +58,13 @@ services:
       - yoloCluster
     ports:
       - 8443:8443
-    env_file:
-      - .env
-    volumes:
-      - /home/areenm/.aws/credentials:/root/.aws/credentials
     depends_on:
       - mongo-init
       - my-yolo-app
+    environment:
+      - BUCKET_NAME=${BUCKET_NAME}
+      - TELEGRAM_APP_URL=${TELEGRAM_APP_URL}
+      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
 
 
   my-yolo-app:
@@ -75,10 +75,10 @@ services:
       - yoloCluster
     ports:
       - 8081:8081
-    env_file:
-      - .env
     depends_on:
       - mongo-init
+    environment:
+      - BUCKET_NAME=${BUCKET_NAME}
 
 networks:
   mongoCluster:
