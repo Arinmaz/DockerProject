@@ -83,7 +83,7 @@ jobs:
             
             cd PolybotService/
             
-            # Save telegram bot token in a secret file, to be used in docker-compose.yaml.
+            # Save telegram bot token in a secret file, to be used in docker-compose.yaml
             echo "${{ secrets.TELEGRAM_BOT_TOKEN }}" > telegram_bot_token.secret
             
             # Get the ngrok current domain (you should assume ngrok is already running in the EC2)
