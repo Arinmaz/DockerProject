@@ -1,6 +1,6 @@
 services:
   mongo1:
-    image: ${MONGO_IMG_NAME}
+    image: mongo:5
     container_name: mongo1
     command: mongod --replSet mongo-replica-set --bind_ip localhost,mongo1
     ports:
@@ -13,7 +13,7 @@ services:
       - .env
 
   mongo2:
-    image: ${MONGO_IMG_NAME}
+    image: mongo:5
     container_name: mongo2
     command: mongod --replSet mongo-replica-set --bind_ip localhost,mongo2
     ports:
@@ -26,7 +26,7 @@ services:
       - .env
 
   mongo3:
-    image: ${MONGO_IMG_NAME}
+    image: mongo:5
     container_name: mongo3
     command: mongod --replSet mongo-replica-set --bind_ip localhost,mongo3
     ports:
