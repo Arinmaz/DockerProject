@@ -22,8 +22,7 @@ services:
       - mongoCluster
     volumes:
       - mongo2-data:/data/db
-    env_file:
-      - .env
+
 
   mongo3:
     image: mongo:5
@@ -35,12 +34,11 @@ services:
       - mongoCluster
     volumes:
       - mongo3-data:/data/db
-    env_file:
-      - .env
+
 
   mongo-init:
     container_name: mongo-init
-    image: ${MONGO_IMG_NAME}
+    image: mongo:5
     networks:
       - mongoCluster
     depends_on:
