@@ -1,7 +1,6 @@
-
 services:
   mongo1:
-    image: arinmaz/arin-docker-repository:custom-mongo-replset
+    image: ${MONGO_IMG_NAME}
     container_name: mongo1
     networks:
       - mongoCluster
@@ -13,7 +12,7 @@ services:
       - ./init.sh:/docker-entrypoint-initdb.d/init.sh
 
   mongo2:
-    image: arinmaz/arin-docker-repository:custom-mongo-replset
+    image: ${MONGO_IMG_NAME}
     container_name: mongo2
     networks:
       - mongoCluster
@@ -23,7 +22,7 @@ services:
       - .env
 
   mongo3:
-    image: arinmaz/arin-docker-repository:custom-mongo-replset
+    image: ${MONGO_IMG_NAME}
     container_name: mongo3
     networks:
       - mongoCluster
@@ -44,9 +43,7 @@ services:
       - .env
     volumes:
       - /home/areenm/.aws/credentials:/root/.aws/credentials
-    environment:
-      - TELEGRAM_TOKEN=${TELEGRAM_TOKEN}
-      - TELEGRAM_APP_URL=${TELEGRAM_APP_URL}
+
 
   my-yolo-app:
     image: ${YOLO5_IMG_NAME}
