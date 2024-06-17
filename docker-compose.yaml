@@ -9,8 +9,7 @@ services:
       - mongoCluster
     volumes:
       - mongo1-data:/data/db
-    env_file:
-      - .env
+
 
   mongo2:
     image: ${MONGO_IMG_NAME}
